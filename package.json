@@ -1,0 +1,27 @@
+{
+  "name": "SIG_ABRT",
+  "version": "0.0.1",
+  "description": "js13K entry",
+  "main": "app.js",
+  "keywords": [
+    "game",
+    "html",
+    "js",
+    "marco",
+    "stagni"
+  ],
+  "author": "Marco Stagni <mrc.stagni@gmail.com>",
+  "license": "ISC",
+  "devDependencies": {
+    "clean-css": "^3.4.19",
+    "html-minifier": "^3.0.2",
+    "uglify-js": "^2.7.3"
+  },
+  "scripts": {
+    "minify": "npm run minify:html && npm run minify:js && npm run minify:css",
+    "minify:css": "cleancss -o ./dist/app.css ./app/app.css",
+    "minify:js": "uglifyjs app/app.js -o dist/app.js -c -v -m",
+    "minify:html": "html-minifier --collapse-whitespace ./app/index.html -o ./dist/index.html",
+    "build": "npm minify && zip dist.zip zip"
+  }
+}

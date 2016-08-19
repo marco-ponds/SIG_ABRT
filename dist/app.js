@@ -1,0 +1,1 @@
+function App(){}window.onload=function(){new App};
