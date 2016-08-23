@@ -14,6 +14,7 @@
   "license": "ISC",
   "devDependencies": {
     "clean-css": "^3.4.19",
+    "filesize-cli": "0.0.3",
     "html-minifier": "^3.0.2",
     "uglify-js": "^2.7.3"
   },
@@ -22,6 +23,6 @@
     "minify:css": "cleancss -o ./dist/app.css ./app/app.css",
     "minify:js": "uglifyjs app/app.js -o dist/app.js -c -v -m",
     "minify:html": "html-minifier --collapse-whitespace ./app/index.html -o ./dist/index.html",
-    "build": "npm minify && zip dist.zip zip"
+    "build": "npm run minify && zip -r app.zip dist && filesize-cli app.zip"
   }
 }
