@@ -16,13 +16,23 @@
     "clean-css": "^3.4.19",
     "filesize-cli": "0.0.3",
     "html-minifier": "^3.0.2",
-    "uglify-js": "^2.7.3"
+    "http-server": "^0.9.0",
+    "live-reload": "^1.1.0",
+    "live-server": "^1.1.0",
+    "livereload": "^0.5.0",
+    "opener": "^1.4.1",
+    "parallelshell": "^2.0.0",
+    "uglify-js": "^2.7.3",
+    "watch": "^0.19.2"
   },
   "scripts": {
     "minify": "npm run minify:html && npm run minify:js && npm run minify:css",
     "minify:css": "cleancss -o ./dist/app.css ./app/app.css",
     "minify:js": "uglifyjs app/app.js -o dist/app.js -c -v -m",
     "minify:html": "html-minifier --collapse-whitespace ./app/index.html -o ./dist/index.html",
-    "build": "npm run minify && zip -r app.zip dist && filesize-cli app.zip"
+    "build": "npm run minify && zip -r app.zip dist && filesize-cli app.zip",
+    "watch": "watch \"npm run build\" ./app/ --wait 30",
+    "preserve": "http-server -p 8080 ./app/",
+    "serve": "opener http://localhost:8080"
   }
 }
