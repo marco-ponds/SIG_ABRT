@@ -1,1 +1,1 @@
-body,canvas{height:100%}body{width:100%;margin:0;padding:0}canvas{position:absolute;width:100%%;top:0;left:0}
+body,canvas{height:100%}.container,canvas{position:absolute}body{width:100%;margin:0;padding:0;background-color:#34495e}canvas{width:100%%;top:0;left:0}.container{padding:20px}.panel{display:block;position:relative;float:left}

@@ -1,14 +1,37 @@
 body {
-  height:100%;
-  width: 100%;
-  margin: 0;
-  padding: 0;
+    height:100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #34495e;
 }
 
 canvas {
-  position: absolute;
-  height: 100%;
-  width: 100%%;
-  top: 0;
-  left: 0;
+    position: absolute;
+    height: 100%;
+    width: 100%%;
+    top: 0;
+    left: 0;
+}
+
+.container {
+    position: absolute;
+    padding: 20px;
+    border: 2px solid white;
+    border-radius: 8px;
+    height: 400px;
+    width: 80%;
+    margin: 9%;
+}
+
+.panel {
+    display: block;
+    position: relative;
+    float: left;
+}
+
+.levels_container {
+    border: 2px solid white;
+    height: 400px;
+    width: 200px;
 }

@@ -15,6 +15,4 @@ App.prototype = {
 
 window.onload = function() {
     var app = new App();
-    app.log('ciao');
-    app.log('aggiungiamo una modifica a caso');
 }

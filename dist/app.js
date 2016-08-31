@@ -1,1 +1,1 @@
-function KeyListener(){}function App(){}App.prototype={log:function(o){console.log(o)}},window.onload=function(){var o=new App;o.log("ciao")};
+function KeyListener(){}function App(){}App.prototype={log:function(n){console.log(n)}},window.onload=function(){new App};
