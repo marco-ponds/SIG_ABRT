@@ -1,1 +1,1 @@
-function KeyListener(){}function App(){}App.prototype={log:function(n){console.log(n)}},window.onload=function(){new App};
+function Coffee(){}function Sleep(){}function App(){this.version="v0.0.1"}App.prototype={printVersion:function(){var n=document.getElementById("version");n.innerText=this.version}},window.onload=function(){var n=new App;n.printVersion()};
