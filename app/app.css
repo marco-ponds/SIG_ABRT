@@ -3,10 +3,10 @@ body {
     width: 100%;
     margin: 0;
     padding: 0;
-    background-color: #34495e;
+    background-color: black;
 }
 
-canvas {
+canvas#game {
     position: absolute;
     height: 100%;
     width: 100%%;
@@ -17,8 +17,8 @@ canvas {
 .container {
     position: absolute;
     padding: 20px;
-    border: 2px solid white;
-    border-radius: 8px;
+    border: 1px solid white;
+    /* border-radius: 8px; */
     height: 400px;
     width: 80%;
     margin: 9%;
@@ -31,7 +31,18 @@ canvas {
 }
 
 .levels_container {
-    border: 2px solid white;
-    height: 400px;
+    border: 1px solid white;
+    height: 380px;
     width: 200px;
+    padding: 10px 0px 10px 0px;
+}
+
+.bar {
+    height: 100px
+}
+
+.bar canvas {
+    height: 50px;
+    width: 100%;
+    border-bottom: 1px solid white;
 }
