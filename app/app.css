@@ -31,10 +31,11 @@ canvas#game {
 }
 
 .levels_container {
-    border: 1px solid white;
+    border-top: 8px solid white;
+    border-bottom: 8px solid white;
     height: 380px;
     width: 200px;
-    padding: 10px 0px 10px 0px;
+    padding: 10px 0px 2px 0px;
 }
 
 .bar {
@@ -45,4 +46,12 @@ canvas#game {
     height: 50px;
     width: 100%;
     border-bottom: 1px solid white;
+}
+
+.bar span {
+    color: white;
+    font-family: monospace;
+    font-style: italic;
+    padding: 10px;
+    letter-spacing: 10px;
 }
