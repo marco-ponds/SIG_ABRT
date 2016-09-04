@@ -1,1 +1,1 @@
-function Coffee(){}function Sleep(){}function App(){this.version="v0.0.1"}App.prototype={printVersion:function(){var n=document.getElementById("version");n.innerText=this.version}},window.onload=function(){var n=new App;n.printVersion()};
+function Bar(n){this.canvas=document.getElement}function App(){this.version="v0.0.1",this.author="Marco Stagni"}App.prototype={printVersion:function(){var n=document.getElementById("version");n.innerText=this.version}},window.onload=function(){var n=new App;n.printVersion()};

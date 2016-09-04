@@ -1,13 +1,10 @@
-function Coffee() {
-
-}
-
-function Sleep() {
-
+function Bar(element) {
+    this.canvas = document.getElement
 }
 
 function App() {
     this.version = 'v0.0.1';
+    this.author = 'Marco Stagni';
 }
 
 App.prototype = {
