@@ -11,7 +11,7 @@
     "stagni"
   ],
   "author": "Marco Stagni <mrc.stagni@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "clean-css": "^3.4.19",
     "filesize-cli": "0.0.3",
