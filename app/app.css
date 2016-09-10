@@ -178,7 +178,7 @@
     position: absolute;
     font-size: 10px;
     top: 92px;
-    left: 1044px;
+    left: 1093px;
     letter-spacing: 10px;
 }
 
@@ -191,13 +191,13 @@ body {
 }
 
 #gameContainer {
-    overflow: auto;
+    overflow: scroll;
     height: 409px;
-    width: 737px;
+    width: 794px;
 }
 
 canvas#game {
-    position: absolute;
+    /* position: absolute; */
     top: 0;
     left: 0;
     margin: 29px;

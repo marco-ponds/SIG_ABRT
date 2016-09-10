@@ -64,6 +64,7 @@ function App() {
 
     this.canvas = document.querySelector('#game');
     this.container = document.querySelector('#gameContainer');
+    this.c = this.canvas.getContext('2d');
     this.canvas.height = 1400;
     this.canvas.width = 1400;
 
@@ -76,8 +77,8 @@ function App() {
 
 App.prototype = {
     printVersion: function() {
-      var container = document.getElementById('version');
-      container.innerText = this.version;
+        var container = document.getElementById('version');
+        container.innerText = this.version;
     },
 
     // maze generation thanks to http://rosettacode.org/wiki/Maze_generation#JavaScript
@@ -118,31 +119,66 @@ App.prototype = {
 
      drawMaze: function(m) {
     	var text= [];
+        var pos = {
+            x: 0,
+            y: 0
+        };
+        this.c.fillStyle = 'rgb(255, 255, 0)';
     	for (var j= 0; j<m.x*2+1; j++) {
     		var line= [];
     		if (0 == j%2)
     			for (var k=0; k<m.y*4+1; k++)
-    				if (0 == k%4)
-    					line[k]= '+';
+    				if (0 == k%4) {
+                        line[k]= '+';
+                        // moving to the right of 50px
+                        this.c.fillRect(pos.x, pos.y, 50, 50);
+                        pos.x += 50;
+                    }
     				else
-    					if (j>0 && m.verti[j/2-1][Math.floor(k/4)])
-    						line[k]= ' ';
-    					else
+    					if (j>0 && m.verti[j/2-1][Math.floor(k/4)]) {
+                            line[k]= ' ';
+                            pos.x += 50;
+                            this.c.moveTo(pos.x, pos.y);
+                        } else {
     						line[k]= '-';
+                            this.c.fillRect(pos.x, pos.y, 50, 20);
+                            pos.x += 50;
+                        }
     		else
     			for (var k=0; k<m.y*4+1; k++)
     				if (0 == k%4)
-    					if (k>0 && m.horiz[(j-1)/2][k/4-1])
+    					if (k>0 && m.horiz[(j-1)/2][k/4-1]) {
     						line[k]= ' ';
-    					else
-    						line[k]= '|';
-    				else
+                            pos.x += 50;
+                            this.c.moveTo(pos.x, pos.y);
+                        }
+    					else {
+    						line[k]= '|'; //verticalwall
+                            this.c.fillRect(pos.x, pos.y, 20, 50);
+                            pos.x += 50;
+                        }
+    				else {
     					line[k]= ' ';
-    		if (0 == j) line[1]= line[2]= line[3]= ' ';
-    		if (m.x*2-1 == j) line[4*m.y]= ' ';
+                        pos.x += 50;
+                        this.c.moveTo(pos.x, pos.y);
+                    }
+    		if (0 == j) {
+                line[1]= line[2]= line[3]= ' ';
+                pos.x += 50;
+                this.c.moveTo(pos.x, pos.y);
+            }
+    		if (m.x*2-1 == j) {
+                line[4*m.y]= ' ';
+                pos.x += 50;
+                this.c.moveTo(pos.x, pos.y);
+            }
     		text.push(line.join('')+'\r\n');
+            // moving down one line, resetting x position
+            pos.x = 0;
+            pos.y += 50;
     	}
-    	return text.join('');
+        console.log(text);
+    	//return text.join('');
     },
 
     render: function() {
@@ -150,6 +186,7 @@ App.prototype = {
         this.coffee.render();
         this.sleep.render();
         // rendering game
+
 
         // rendering player
 
