@@ -61,6 +61,13 @@ function App() {
 
     this.coffee = new Bar('coffee');
     this.sleep = new Bar('sleep');
+
+    this.canvas = document.querySelector('#game');
+    this.canvas.height = 700;
+    this.canvas.width = 700;
+
+    this.maze = this.createMaze(this.canvas.height/50, this.canvas.height/50);
+    this.drawMaze(this.maze);
 }
 
 App.prototype = {
@@ -69,7 +76,8 @@ App.prototype = {
       container.innerText = this.version;
     },
 
-    _maze: function(x,y) {
+    // maze generation thanks to http://rosettacode.org/wiki/Maze_generation#JavaScript
+    createMaze: function(x,y) {
     	var n=x*y-1;
     	if (n<0) {alert("illegal maze dimensions");return;}
     	var horiz =[]; for (var j= 0; j<x+1; j++) horiz[j]= [],
@@ -104,7 +112,7 @@ App.prototype = {
     	return {x: x, y: y, horiz: horiz, verti: verti};
     },
 
-     _display: function(maze) {
+     drawMaze: function(m) {
     	var text= [];
     	for (var j= 0; j<m.x*2+1; j++) {
     		var line= [];
@@ -153,8 +161,9 @@ function render() {
     app.renderid = requestAnimationFrame(render);
 }
 
+var app;
 window.onload = function() {
-    window.app = new App();
+    app = new App();
     app.printVersion();
 
     // calling render function
