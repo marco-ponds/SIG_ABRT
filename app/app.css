@@ -178,7 +178,7 @@
     position: absolute;
     font-size: 10px;
     top: 92px;
-    left: 1050px;
+    left: 1044px;
     letter-spacing: 10px;
 }
 
@@ -190,10 +190,17 @@ body {
     background-color: black;
 }
 
+#gameContainer {
+    overflow: auto;
+    height: 409px;
+    width: 737px;
+}
+
 canvas#game {
     position: absolute;
     top: 0;
     left: 0;
+    margin: 29px;
 }
 
 .container {
@@ -204,6 +211,7 @@ canvas#game {
     height: 400px;
     width: 80%;
     margin: 9%;
+    overflow: hidden;
 }
 
 .panel {

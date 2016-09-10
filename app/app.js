@@ -63,8 +63,12 @@ function App() {
     this.sleep = new Bar('sleep');
 
     this.canvas = document.querySelector('#game');
-    this.canvas.height = 700;
-    this.canvas.width = 700;
+    this.container = document.querySelector('#gameContainer');
+    this.canvas.height = 1400;
+    this.canvas.width = 1400;
+
+    this.container.style.height = this.canvas.height + 'px;';
+    this.container.style.width = this.canvas.width + 'px;';
 
     this.maze = this.createMaze(this.canvas.height/50, this.canvas.height/50);
     this.drawMaze(this.maze);
