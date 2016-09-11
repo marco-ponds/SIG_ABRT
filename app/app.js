@@ -85,9 +85,15 @@ function Player(w, h) {
             x: (this.mouse.x - this.pos.x)/d,
             y: (this.mouse.y - this.pos.y)/d
         };
-        this.pos.x += this.dir.x || 0;
-        this.pos.y += this.dir.y || 0;
-
+        var next_pos = {
+            x: this.pos.x + this.dir.x || 0,
+            y: this.pos.y + this.dir.y || 0
+        }
+        //this.pos.x += this.dir.x || 0;
+        //this.pos.y += this.dir.y || 0;
+        if ((this._getDistance(next_pos) > this.radius) && this.checkPosition(next_pos)) {
+            this._updatePosition();
+        }
     }).bind(this))
 
 }
@@ -97,23 +103,45 @@ Player.prototype = {
         return this.life > 0;
     },
 
-    _getDistance: function() {
+    _getDistance: function(_pos) {
+        var pos = _pos || this.pos;
         if (!this.mouse) return 0;
-        return Math.round(Math.sqrt(Math.pow(this.pos.x - this.mouse.x, 2) + Math.pow(this.pos.y - this.mouse.y, 2)));
+        return Math.round(Math.sqrt(Math.pow(pos.x - this.mouse.x, 2) + Math.pow(pos.y - this.mouse.y, 2)));
+    },
+
+    _updatePosition: function() {
+        this.pos.x += this.dir.x || 0;
+        this.pos.y += this.dir.y || 0;
+    },
+
+    checkPosition: function(_pos) {
+        var pos = _pos || this.pos;
+        if ((pos.x < 10) || (pos.x > this.canvas.width)) return false;
+        if ((pos.y < 10) || (pos.y > this.canvas.height)) return false;
+        var data = app.c.getImageData(pos.x, pos.y, 4, 4).data;
+        //if (data.indexOf(0) == -1) return false;
+        //if ((data[0] != 0) && (data[1] != 0) && (data[2] != 0)) return false;
+        if (data.indexOf(85) != -1) return false;
+        return true;
     },
 
     render: function() {
-        this.c.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.c.beginPath();
-        var radius = this.radius + (Math.sin(this.angle))
-        this.c.arc(this.pos.x, this.pos.y, radius, 0, 2 * Math.PI, false);
-        this.c.fillStyle = 'blue';
-        this.c.fill();
-        // increasing angle for radius animation
-        this.angle += 0.05;
-        if ((this.dir.x != NaN) && (this.dir.y != NaN) && (this._getDistance() > this.radius)) {
-            this.pos.x += this.dir.x || 0;
-            this.pos.y += this.dir.y || 0;
+        if ((this._getDistance() > this.radius) && this.checkPosition()) {
+            this._updatePosition();
+
+
+            this.c.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            this.c.beginPath();
+            var radius = this.radius + (Math.sin(this.angle))
+            this.c.arc(this.pos.x, this.pos.y, radius, 0, 2 * Math.PI, false);
+            this.c.fillStyle = 'blue';
+            this.c.fill();
+            // increasing angle for radius animation
+            this.angle += 0.05;
+            //var next_pos = {
+            //    x: this.pos.x + (this.dir.x || 0),
+            //    y: this.pos.y + (this.dir.y || 0)
+            //}
         }
     }
 }
