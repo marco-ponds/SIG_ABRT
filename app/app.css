@@ -191,7 +191,7 @@ body {
 }
 
 #gameContainer {
-    overflow: scroll;
+    overflow: hidden;
     height: 409px;
     width: 794px;
 }
@@ -201,6 +201,7 @@ canvas#game {
     top: 0;
     left: 0;
     margin: 29px;
+    margin-top: 0;
 }
 
 .container {

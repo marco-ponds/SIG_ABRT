@@ -65,13 +65,15 @@ function App() {
     this.canvas = document.querySelector('#game');
     this.container = document.querySelector('#gameContainer');
     this.c = this.canvas.getContext('2d');
-    this.canvas.height = 1400;
-    this.canvas.width = 1400;
+    this.canvas.height = 2500;
+    this.canvas.width = 4900;
+    this.step = 100;
+    this.margin = 200;
 
     this.container.style.height = this.canvas.height + 'px;';
     this.container.style.width = this.canvas.width + 'px;';
 
-    this.maze = this.createMaze(this.canvas.height/50, this.canvas.height/50);
+    this.maze = this.createMaze(12, 12);
     this.drawMaze(this.maze);
 }
 
@@ -131,53 +133,59 @@ App.prototype = {
     				if (0 == k%4) {
                         line[k]= '+';
                         // moving to the right of 50px
-                        this.c.fillRect(pos.x, pos.y, 50, 50);
-                        pos.x += 50;
+                        this.c.fillRect(pos.x, pos.y, 20, 20);
+                        pos.x += this.step;
+                        // new
+                        this.c.moveTo(pos.x, pos.y);
                     }
     				else
     					if (j>0 && m.verti[j/2-1][Math.floor(k/4)]) {
                             line[k]= ' ';
-                            pos.x += 50;
+                            pos.x += this.step;
                             this.c.moveTo(pos.x, pos.y);
                         } else {
     						line[k]= '-';
-                            this.c.fillRect(pos.x, pos.y, 50, 20);
-                            pos.x += 50;
+                            this.c.fillRect(pos.x - 90, pos.y, 190, 20);
+                            pos.x += this.step;
+                            //new
+                            this.c.moveTo(pos.x, pos.y);
                         }
     		else
     			for (var k=0; k<m.y*4+1; k++)
     				if (0 == k%4)
     					if (k>0 && m.horiz[(j-1)/2][k/4-1]) {
     						line[k]= ' ';
-                            pos.x += 50;
+                            pos.x += this.step;
                             this.c.moveTo(pos.x, pos.y);
                         }
     					else {
     						line[k]= '|'; //verticalwall
-                            this.c.fillRect(pos.x, pos.y, 20, 50);
-                            pos.x += 50;
+                            this.c.fillRect(pos.x, pos.y - 90, 20, 190);
+                            pos.x += this.step;
+                            // new
+                            this.c.moveTo(pos.x, pos.y);
                         }
     				else {
     					line[k]= ' ';
-                        pos.x += 50;
+                        pos.x += this.step;
                         this.c.moveTo(pos.x, pos.y);
                     }
     		if (0 == j) {
                 line[1]= line[2]= line[3]= ' ';
-                pos.x += 50;
+                pos.x += this.step;
                 this.c.moveTo(pos.x, pos.y);
             }
     		if (m.x*2-1 == j) {
                 line[4*m.y]= ' ';
-                pos.x += 50;
+                pos.x += this.step;
                 this.c.moveTo(pos.x, pos.y);
             }
     		text.push(line.join('')+'\r\n');
             // moving down one line, resetting x position
             pos.x = 0;
-            pos.y += 50;
+            pos.y += this.step;
     	}
-        console.log(text);
+        console.log(text.join(''));
     	//return text.join('');
     },
 
