@@ -55,12 +55,80 @@ Bar.prototype = {
     }
 }
 
+function Player(w, h) {
+    this.canvas = document.querySelector('#player');
+    this.canvas.width = w;
+    this.canvas.height = h;
+    this.c = this.canvas.getContext('2d');
+    this.life = 100;
+    this.pos = {
+        x: 50,
+        y: 50
+    },
+    this.dir = {
+        x: 0,
+        y: 0
+    }
+    this.radius = 20;
+    this.speed = 1;
+
+    document.addEventListener('mousemove', (function(evt) {
+        if (!evt.target == this.canvas) return;
+        var rect = this.canvas.getBoundingClientRect();
+        var mouse = {
+            x: Math.round((evt.clientX-rect.left)/(rect.right-rect.left)*this.canvas.width),
+            y: Math.round((evt.clientY-rect.top)/(rect.bottom-rect.top)*this.canvas.height)
+        }
+        var d = Math.round(Math.sqrt(Math.pow(this.pos.x - mouse.x, 2) + Math.pow(this.pos.y - mouse.y, 2)))
+        this.dir = {
+            x: (mouse.x - this.pos.x)/d,
+            y: (mouse.y - this.pos.y)/d
+        };
+        if (this.dir.x == NaN) 	;
+        this.pos.x += this.dir.x || 0;
+        this.pos.y += this.dir.y || 0;
+
+    }).bind(this))
+
+//    document.addEventListener('keydown', (function(e) {
+//        e = e || window.event;
+
+//        if (e.keyCode == '38') {
+//            // up arrow
+//            this.pos.y = this.pos.y - this.speed;
+//        }
+//        else if (e.keyCode == '40') {
+//            // down arrow
+//            this.pos.y += this.speed;
+//        }
+//        else if (e.keyCode == '37') {
+//           // left arrow
+//           this.pos.x = this.pos.x - this.speed;
+//        }
+//        else if (e.keyCode == '39') {
+//           // right arrow
+//           this.pos.x += this.speed;
+//        }
+//    }).bind(this));
+}
+
+Player.prototype = {
+    isAlive: function() {
+        return this.life > 0;
+    },
+
+    render: function() {
+        this.c.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.c.beginPath();
+        this.c.arc(this.pos.x, this.pos.y, this.radius, 0, 2 * Math.PI, false);
+        this.c.fillStyle = 'blue';
+        this.c.fill();
+    }
+}
+
 function App() {
     this.version = 'v0.0.1';
     this.author = 'Marco Stagni';
-
-    this.coffee = new Bar('coffee');
-    this.sleep = new Bar('sleep');
 
     this.canvas = document.querySelector('#game');
     this.container = document.querySelector('#gameContainer');
@@ -72,6 +140,11 @@ function App() {
 
     this.container.style.height = this.canvas.height + 'px;';
     this.container.style.width = this.canvas.width + 'px;';
+
+    this.coffee = new Bar('coffee');
+    this.sleep = new Bar('sleep');
+
+    this.player = new Player(this.canvas.height, this.canvas.width);
 
     this.maze = this.createMaze(12, 12);
     this.drawMaze(this.maze);
@@ -197,7 +270,7 @@ App.prototype = {
 
 
         // rendering player
-
+        this.player.render();
         // rendering enemies
 
     }

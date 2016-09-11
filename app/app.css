@@ -76,9 +76,9 @@
   content: attr(data-text);
   position: absolute;
   left: 2px;
-  text-shadow: -1px 0 red;
+  text-shadow: -3px 0 red;
   top: 0;
-  color: #666;
+  color: yellow;
   background: #000;
   overflow: hidden;
   clip: rect(0, 900px, 0, 0);
@@ -154,9 +154,9 @@
   content: attr(data-text);
   position: absolute;
   left: -2px;
-  text-shadow: 1px 0 blue;
+  text-shadow: 5px 0 blue;
   top: 0;
-  color: #aaa;
+  color: lime;
   background: #000;
   overflow: hidden;
   clip: rect(0, 900px, 0, 0);
@@ -196,8 +196,10 @@ body {
     width: 794px;
 }
 
-canvas#game {
-    /* position: absolute; */
+canvas#game,
+canvas#player,
+canvas#enemies {
+    position: absolute;
     top: 0;
     left: 0;
     margin: 29px;
