@@ -167,7 +167,7 @@
     font-family: monospace;
     position: absolute;
     font-size: 32px;
-    top: 60px;
+    top: 35px;
     left: 130px;
     letter-spacing: 10px;
 }
@@ -177,7 +177,7 @@
     font-family: monospace;
     position: absolute;
     font-size: 10px;
-    top: 92px;
+    top: 54px;
     left: 1093px;
     letter-spacing: 10px;
 }
@@ -213,6 +213,7 @@ canvas#game {
     width: 80%;
     margin: 9%;
     overflow: hidden;
+    margin-top: 6%;
 }
 
 .panel {

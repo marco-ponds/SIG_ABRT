@@ -125,7 +125,7 @@ App.prototype = {
             x: 0,
             y: 0
         };
-        this.c.fillStyle = 'rgb(255, 255, 0)';
+        this.c.fillStyle = '#555555';
     	for (var j= 0; j<m.x*2+1; j++) {
     		var line= [];
     		if (0 == j%2)
@@ -133,7 +133,7 @@ App.prototype = {
     				if (0 == k%4) {
                         line[k]= '+';
                         // moving to the right of 50px
-                        this.c.fillRect(pos.x, pos.y, 20, 20);
+                        this.c.fillRect(pos.x, pos.y, 8, 8);
                         pos.x += this.step;
                         // new
                         this.c.moveTo(pos.x, pos.y);
@@ -145,7 +145,7 @@ App.prototype = {
                             this.c.moveTo(pos.x, pos.y);
                         } else {
     						line[k]= '-';
-                            this.c.fillRect(pos.x - 90, pos.y, 190, 20);
+                            this.c.fillRect(pos.x - 90, pos.y, 190, 8);
                             pos.x += this.step;
                             //new
                             this.c.moveTo(pos.x, pos.y);
@@ -160,7 +160,7 @@ App.prototype = {
                         }
     					else {
     						line[k]= '|'; //verticalwall
-                            this.c.fillRect(pos.x, pos.y - 90, 20, 190);
+                            this.c.fillRect(pos.x, pos.y - 90, 8, 190);
                             pos.x += this.step;
                             // new
                             this.c.moveTo(pos.x, pos.y);
