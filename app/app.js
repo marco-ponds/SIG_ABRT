@@ -1,3 +1,44 @@
+var GLITCHES = {
+    'invert_color': {
+        color: 'red',
+        shape: 'triangle',
+        effect: function() {}
+    },
+    'lag': {
+        color: 'green',
+        shape: 'square',
+        effect: function() {}
+    },
+    'invisible': {
+        color: 'white',
+        shape: 'circle',
+        effect: function() {}
+    }
+}
+
+var GLITCHES_HUMAN = {
+    tired: {
+        blink: function() {
+          // eyes blinking
+        },
+        wavy: function() {
+            // random oscillation of the screen
+        },
+        wtf: function() {
+            // all enemies have the same color and shape and effect
+        }
+    },
+    excited: {
+        fast: function() {
+            // everything is moving faster
+        },
+        colors: function() {
+            // colors are changing.
+        }
+    }
+
+}
+
 function randomInt(min,max)
 {
     return Math.floor(Math.random()*(max-min+1)+min);
@@ -55,12 +96,37 @@ Bar.prototype = {
     }
 }
 
+function createEnemies(w, h) {
+    this.canvas = document.querySelector('#enemies');
+    this.canvas.width = w;
+    this.canvas.height = h;
+    this.c = this.canvas.getContext('2d');
+    this.count = 100;
+    this.types = Object.keys(GLITCHES);
+}
+
+function Enemy(type) {
+    this.life = 20;
+    this.type = type;
+    this.pos = {
+        x: (Math.random() * (this.canvas.width - 100)) + 100,
+        y: (Math.random() * (this.canvas.height - 100)) + 100
+    }
+}
+
+Enemy.prototype = {
+    isAlive: function() {
+        return this.life > 0;
+    }
+}
+
 function Player(w, h) {
     this.canvas = document.querySelector('#player');
     this.canvas.width = w;
     this.canvas.height = h;
     this.c = this.canvas.getContext('2d');
     this.life = 100;
+    this.hit = 2
     this.pos = {
         x: 50,
         y: 50
