@@ -57,6 +57,14 @@ function randomInt(min,max) {
     return Math.floor(Math.random()*(max-min+1)+min);
 }
 
+function getMousePosition(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+        x: Math.round((evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width),
+        y: Math.round((evt.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height)
+    }
+}
+
 function Bar(element) {
     this.element = element;
     this.canvas = document.getElementById(element);
@@ -141,6 +149,14 @@ EnemiesHolder.prototype = {
                 this.enemies[i].render();
             }
         }
+    },
+
+    handleFire: function(click) {
+        for (var i in this.enemies) {
+            if (this.enemies[i]._getDistance(this.enemies[i].pos, click) < 10) {
+                this.enemies[i].hit(app.player.hit)
+            }
+        }
     }
 }
 
@@ -161,9 +177,14 @@ Enemy.prototype = {
         return this.life > 0;
     },
 
-    _getDistance: function(_pos) {
+    _getDistance: function(_pos, _pos2) {
         var pos = _pos || this.pos;
-        return Math.round(Math.sqrt(Math.pow(pos.x - app.player.pos.x, 2) + Math.pow(pos.y - app.player.pos.y, 2)));
+        var pos2 = _pos2 || app.player.pos;
+        return Math.round(Math.sqrt(Math.pow(pos.x - pos2.x, 2) + Math.pow(pos.y - pos2.y, 2)));
+    },
+
+    hit: function(damage) {
+        this.life = this.life - damage;
     },
 
     explode: function() {
@@ -182,7 +203,7 @@ Enemy.prototype = {
         this.pos.x = this.pos.x + this.dir.x || 0,
         this.pos.y = this.pos.y + this.dir.y || 0
         GLITCHES[this.type].render.bind(this).call();
-        if (d < 10) {
+        if (d < 20) {
             this.explode();
         }
     }
@@ -194,7 +215,7 @@ function Player(w, h) {
     this.canvas.height = h;
     this.c = this.canvas.getContext('2d');
     this.life = 100;
-    this.hit = 2
+    this.hit = 50
     this.pos = {
         x: 50,
         y: 50
@@ -207,13 +228,16 @@ function Player(w, h) {
     this.speed = 1;
     this.angle = 0;
 
+    document.addEventListener('mousedown', (function(evt) {
+        if (!evt.target == this.canvas) return;
+        this.click = getMousePosition(this.canvas, evt);
+        this.fire();
+        app.enemies.handleFire(this.click);
+    }).bind(this))
+
     document.addEventListener('mousemove', (function(evt) {
         if (!evt.target == this.canvas) return;
-        var rect = this.canvas.getBoundingClientRect();
-        this.mouse = {
-            x: Math.round((evt.clientX-rect.left)/(rect.right-rect.left)*this.canvas.width),
-            y: Math.round((evt.clientY-rect.top)/(rect.bottom-rect.top)*this.canvas.height)
-        }
+        this.mouse = getMousePosition(this.canvas, evt);
         var d = this._getDistance();
         this.dir = {
             x: (this.mouse.x - this.pos.x)/d,
@@ -252,6 +276,25 @@ Player.prototype = {
         app.updateMaze(x, y);
     },
 
+    fire: function(click) {
+        if (!this.click || this.firing) return;
+        this.firing = true;
+        this._drawFire();
+        setTimeout((function(){
+            this.firing = false;
+        }).bind(this), 500);
+    },
+
+    _drawFire: function() {
+        //this.c.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.c.strokeStyle = '#ffff00';
+        this.c.beginPath();
+        this.c.moveTo(this.pos.x, this.pos.y);
+        this.c.lineTo(this.click.x, this.click.y);
+        this.c.lineWidth = 2;
+        this.c.stroke();
+    },
+
     checkPosition: function(_pos) {
         var pos = _pos || this.pos;
         if ((pos.x < 10) || (pos.x > this.canvas.width)) return false;
@@ -280,6 +323,9 @@ Player.prototype = {
             //    x: this.pos.x + (this.dir.x || 0),
             //    y: this.pos.y + (this.dir.y || 0)
             //}
+        }
+        if (this.firing) {
+            this._drawFire();
         }
     }
 }
