@@ -37,7 +37,7 @@ var BOOT = [
 ];
 
 var INTRO = [
-    {o: 'mirror', m: 'Good Evening, user_42@m1r200r..'},
+    {o: 'mirror', m: 'Good Evening, user_42@m1rr0r..'},
     {o: 'mirror', m: 'The company needs you to fight an intruder.'},
     {o: 'mirror', m: 'Our fear is that one employee is having mental illness,'},
     {o: 'mirror', m: 'and he\'s now attempting to destroy the company.'}

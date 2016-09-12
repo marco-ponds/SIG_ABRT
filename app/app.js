@@ -2,16 +2,30 @@ var GLITCHES = {
     'invert_color': {
         color: 'red',
         shape: 'triangle',
+        render: function() {
+
+        },
         effect: function() {}
     },
     'lag': {
         color: 'green',
         shape: 'square',
+        render: function() {
+
+        },
         effect: function() {}
     },
     'invisible': {
         color: 'white',
         shape: 'circle',
+        render: function() {
+            this.c.clearRect(0, 0, this.w, this.h);
+            this.c.beginPath();
+            //var radius = this.radius + (Math.sin(this.angle))
+            this.c.arc(this.pos.x, this.pos.y, 20, 0, 2 * Math.PI, false);
+            this.c.fillStyle = '#ffffff';
+            this.c.fill();
+        },
         effect: function() {}
     }
 }
@@ -39,8 +53,7 @@ var GLITCHES_HUMAN = {
 
 }
 
-function randomInt(min,max)
-{
+function randomInt(min,max) {
     return Math.floor(Math.random()*(max-min+1)+min);
 }
 
@@ -96,27 +109,81 @@ Bar.prototype = {
     }
 }
 
-function createEnemies(w, h) {
+function EnemiesHolder(w, h) {
     this.canvas = document.querySelector('#enemies');
     this.canvas.width = w;
     this.canvas.height = h;
     this.c = this.canvas.getContext('2d');
     this.count = 100;
+    this.enemies = [];
     this.types = Object.keys(GLITCHES);
+    // creating 100 enemies
+    for (var i=0; i<100; i++) {
+        this.enemies.push(
+            new Enemy(
+                this.types[Math.floor(Math.random() * this.types.length)],
+                this.c,
+                w,
+                h
+            )
+        );
+    }
 }
 
-function Enemy(type) {
+EnemiesHolder.prototype = {
+    render: function() {
+        this.c.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        for (var i in this.enemies) {
+            if (!this.enemies[i].isAlive()) {
+                // if the enemy is dead, remove from list
+                this.enemies.splice(i, 1);
+            } else {
+                this.enemies[i].render();
+            }
+        }
+    }
+}
+
+function Enemy(type, ctx, w, h) {
     this.life = 20;
+    this.width = w;
+    this.height = h;
     this.type = type;
+    this.c = ctx;
     this.pos = {
-        x: (Math.random() * (this.canvas.width - 100)) + 100,
-        y: (Math.random() * (this.canvas.height - 100)) + 100
+        x: (Math.random() * (this.width - 100)) + 100,
+        y: (Math.random() * (this.height - 100)) + 100
     }
 }
 
 Enemy.prototype = {
     isAlive: function() {
         return this.life > 0;
+    },
+
+    _getDistance: function(_pos) {
+        var pos = _pos || this.pos;
+        return Math.round(Math.sqrt(Math.pow(pos.x - app.player.pos.x, 2) + Math.pow(pos.y - app.player.pos.y, 2)));
+    },
+
+    explode: function() {
+        // applying effect then dies
+        GLITCHES[this.type].render.bind(this).call();
+        this.life = 0;
+    },
+
+    render: function() {
+        var d = this._getDistance();
+        this.dir = {
+            x: (app.player.pos.x - this.pos.x)/d,
+            y: (app.player.pos.y - this.pos.y)/d
+        };
+        this.pos.x = this.pos.x + this.dir.x || 0,
+        this.pos.y = this.pos.y + this.dir.y || 0
+        GLITCHES[this.type].render.bind(this).call();
+        if (d < 10) {
+            this.explode();
+        }
     }
 }
 
@@ -239,7 +306,9 @@ function App() {
     this.coffee = new Bar('coffee');
     this.sleep = new Bar('sleep');
 
-    this.player = new Player(this.canvas.height, this.canvas.width);
+    this.player = new Player(this.canvas.width, this.canvas.height);
+
+    this.enemies = new EnemiesHolder(this.canvas.width, this.canvas.height);
 
     this.maze = this.createMaze(12, 12);
     this.drawMaze(this.maze);
@@ -418,7 +487,7 @@ App.prototype = {
         // rendering player
         this.player.render();
         // rendering enemies
-
+        this.enemies.render();
     }
 }
 

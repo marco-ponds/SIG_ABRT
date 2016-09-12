@@ -32,7 +32,6 @@
     "minify:html": "html-minifier --collapse-whitespace ./app/index.html -o ./dist/index.html",
     "build": "npm run minify && zip -r app.zip dist && filesize-cli app.zip",
     "watch": "watch \"npm run build\" ./app/ --wait 30",
-    "preserve": "http-server -p 8080 ./app/",
-    "serve": "opener http://localhost:8080"
+    "start": "http-server -p 8080 ./app/ & opener http://localhost:8080"
   }
 }
