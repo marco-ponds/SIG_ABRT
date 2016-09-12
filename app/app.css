@@ -190,6 +190,46 @@ body {
     background-color: black;
 }
 
+#conversation {
+    position: absolute;
+    top: 78%;
+    margin-left: 9%;
+    margin-right: 9%;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+    overflow-y: auto;
+    width: 83%;
+    height: 120px;
+}
+
+#conversation li {
+    list-style: none;
+    font-family: monospace;
+    letter-spacing: 5px;
+    font-size: 10px;
+    font-style: italic;
+    margin-top: 3px;
+}
+
+#conversation li.me {
+    color: white;
+    text-align: right;
+}
+
+#conversation li.mirror {
+    color: #555;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: left;
+}
+
+#conversation li.info {
+    color: #5555ff;
+    font-weight: bold;
+    text-align: left;
+}
+
 #gameContainer {
     overflow: hidden;
     height: 409px;

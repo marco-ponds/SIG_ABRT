@@ -110,8 +110,12 @@ Player.prototype = {
     },
 
     _updatePosition: function() {
-        this.pos.x += this.dir.x || 0;
-        this.pos.y += this.dir.y || 0;
+        var x = this.dir.x || 0,
+            y = this.dir.y || 0;
+        this.pos.x += x;
+        this.pos.y += y;
+        // updating scroll
+        app.updateMaze(x, y);
     },
 
     checkPosition: function(_pos) {
@@ -150,8 +154,13 @@ function App() {
     this.version = 'v0.0.1';
     this.author = 'Marco Stagni';
 
+    this.conversation = document.querySelector('#conversation');
+    this.printing = false;
+    this.queue = [];
+
     this.canvas = document.querySelector('#game');
     this.container = document.querySelector('#gameContainer');
+    this._canvases = this.container.querySelectorAll('canvas');
     this.c = this.canvas.getContext('2d');
     this.canvas.height = 2500;
     this.canvas.width = 4900;
@@ -174,6 +183,46 @@ App.prototype = {
     printVersion: function() {
         var container = document.getElementById('version');
         container.innerText = this.version;
+    },
+
+    say: function(owner, message) {
+        if (this.printing) {
+            this.queue.push({o: owner, m: message});
+            return;
+        }
+        var li = document.createElement('li');
+        li.className = owner;
+        this.conversation.appendChild(li);
+        var i = 0;
+        app.printing = true;
+
+        function _appendText() {
+            li.innerHTML += message[i];
+            app.conversation.scrollTop = app.conversation.scrollHeight;
+            i++;
+            if (i<message.length) {
+                setTimeout(_appendText, Math.round(Math.random() * 80))
+            } else {
+                app.printing = false;
+                if (app.queue.length != 0) {
+                    var msg = app.queue.shift();
+                    app.say(msg.o, msg.m);
+                }
+            }
+        }
+        setTimeout(_appendText, Math.round(Math.random() * 80));
+    },
+
+    boot: function() {
+        for (var i in BOOT) {
+            app.say(BOOT[i].o, BOOT[i].m);
+        }
+    },
+
+    intro: function() {
+        for (var i in INTRO) {
+            app.say(INTRO[i].o, INTRO[i].m);
+        }
     },
 
     // maze generation thanks to http://rosettacode.org/wiki/Maze_generation#JavaScript
@@ -212,7 +261,7 @@ App.prototype = {
     	return {x: x, y: y, horiz: horiz, verti: verti};
     },
 
-     drawMaze: function(m) {
+    drawMaze: function(m) {
     	var text= [];
         var pos = {
             x: 0,
@@ -282,6 +331,13 @@ App.prototype = {
     	//return text.join('');
     },
 
+    updateMaze: function(x, y) {
+        // move all canvases
+        for (var i in this.canvases) {
+            //this.canvases[i].style.top
+        }
+    },
+
     check: function() {
 
     },
@@ -311,6 +367,8 @@ var app;
 window.onload = function() {
     app = new App();
     app.printVersion();
+    app.boot();
+    app.intro();
 
     // calling render function
     render();
