@@ -22,7 +22,7 @@ var GLITCHES = {
             this.c.clearRect(0, 0, this.w, this.h);
             this.c.beginPath();
             //var radius = this.radius + (Math.sin(this.angle))
-            this.c.arc(this.pos.x, this.pos.y, 20, 0, 2 * Math.PI, false);
+            this.c.arc(this.pos.x, this.pos.y, 10, 0, 2 * Math.PI, false);
             this.c.fillStyle = '#ffffff';
             this.c.fill();
         },
@@ -170,6 +170,7 @@ Enemy.prototype = {
         // applying effect then dies
         GLITCHES[this.type].render.bind(this).call();
         this.life = 0;
+        // TODO player is damaged
     },
 
     render: function() {
@@ -469,6 +470,7 @@ App.prototype = {
     updateMaze: function(x, y) {
         // move all canvases
         for (var i in this.canvases) {
+            // TODO still need to update maze position
             //this.canvases[i].style.top
         }
     },
