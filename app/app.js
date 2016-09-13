@@ -19,7 +19,16 @@ var GLITCHES = {
         color: 'green',
         shape: 'square',
         render: function() {
-
+            this.c.clearRect(0, 0, this.w, this.h);
+            this.c.beginPath();
+            this.c.moveTo(this.pos.x, this.pos.y);
+            this.c.lineTo(this.pos.x + 20, this.pos.y);
+            this.c.lineTo(this.pos.x + 20, this.pos.y + 20);
+            this.c.lineTo(this.pos.x, this.pos.y + 20);
+            this.c.lineTo(this.pos.x, this.pos.y);
+            this.c.lineWidth = 1;
+            this.c.strokeStyle = 'green';
+            this.c.stroke();
         },
         effect: function() {}
     },
@@ -31,6 +40,12 @@ var GLITCHES = {
             this.c.beginPath();
             //var radius = this.radius + (Math.sin(this.angle))
             this.c.arc(this.pos.x, this.pos.y, 10, 0, 2 * Math.PI, false);
+            this.c.fillStyle = '#ffffff';
+            this.c.fill();
+            this.c.arc(this.pos.x, this.pos.y, 8, 0, 2 * Math.PI, false);
+            this.c.fillStyle = '#000000';
+            this.c.fill();
+            this.c.arc(this.pos.x, this.pos.y, 5, 0, 2 * Math.PI, false);
             this.c.fillStyle = '#ffffff';
             this.c.fill();
         },
@@ -65,11 +80,11 @@ function randomInt(min,max) {
     return Math.floor(Math.random()*(max-min+1)+min);
 }
 
-function getMousePosition(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
+function getMousePosition(element, evt) {
+    var rect = element.getBoundingClientRect();
     return {
-        x: Math.round((evt.clientX-rect.left)/(rect.right-rect.left)*canvas.width),
-        y: Math.round((evt.clientY-rect.top)/(rect.bottom-rect.top)*canvas.height)
+        x: Math.round((evt.clientX-rect.left)/(rect.right-rect.left)*element.width),
+        y: Math.round((evt.clientY-rect.top)/(rect.bottom-rect.top)*element.height)
     }
 }
 
@@ -283,8 +298,8 @@ Player.prototype = {
             y = this.dir.y || 0;
         this.pos.x += x;
         this.pos.y += y;
-        // updating scroll
-        app.updateMaze(x, y);
+
+        //app.updateMaze();
     },
 
     fire: function(click) {
@@ -351,8 +366,10 @@ function App() {
 
     this.canvas = document.querySelector('#game');
     this.container = document.querySelector('#gameContainer');
-    this._canvases = this.container.querySelectorAll('canvas');
+    this.canvases = this.container.querySelectorAll('canvas');
     this.c = this.canvas.getContext('2d');
+    this.container.height = 409;
+    this.container.width = 794;
     this.canvas.height = 2500;
     this.canvas.width = 4900;
     this.step = 100;
@@ -370,6 +387,12 @@ function App() {
 
     this.maze = this.createMaze(12, 12);
     this.drawMaze(this.maze);
+
+    document.addEventListener('mousemove', (function(evt) {
+        if (!evt.target == this.container) return;
+        //console.log('inside mousemove');
+        this.mouse = getMousePosition(this.container, evt);
+    }).bind(this));
 }
 
 App.prototype = {
@@ -520,15 +543,42 @@ App.prototype = {
             pos.x = 0;
             pos.y += this.step;
     	}
-        console.log(text.join(''));
+        ////console.log(text.join(''));
     	//return text.join('');
     },
 
-    updateMaze: function(x, y) {
-        // move all canvases
-        for (var i in this.canvases) {
-            // TODO still need to update maze position
-            //this.canvases[i].style.top
+    updateMaze: function() {
+        if (!this.mouse) return;
+        if ((app.player._getDistance() < 150) &&
+            ((this.mouse.x > (this.container.width - 100))
+            ||(this.mouse.y > (this.container.height - 100))
+            ||(this.mouse.x > 0 && this.mouse.x < 100)
+            ||(this.mouse.y > 0 && this.mouse.y < 100)
+            )) {
+
+            var x = app.player.dir.x,
+                y = app.player.dir.y;
+            // move all canvases
+            var top = parseInt(app.canvases[0].style.top.replace('px', '')) || 0;
+            var left = parseInt(app.canvases[0].style.left.replace('px', '')) || 0;
+            top = top - (y*10);
+            left = left - (x*10);
+            if (top > 0) {
+                top = 0;
+            } else if (top < -2000) {
+                top = -2000;
+            }
+            if (left > 0) {
+                left = 0;
+            } else if (left < -4600) {
+                left = -4600;
+            }
+            var i = 0;
+            for (i=0; i<app.canvases.length; i++) {
+                // TODO still need to update maze position
+                app.canvases[i].style.top = top + 'px';
+                app.canvases[i].style.left = left + 'px';
+            }
         }
     },
 
@@ -541,7 +591,7 @@ App.prototype = {
         this.coffee.render();
         this.sleep.render();
         // rendering game
-        this.check();
+        this.updateMaze();
 
         // rendering player
         this.player.render();
