@@ -3,7 +3,15 @@ var GLITCHES = {
         color: 'red',
         shape: 'triangle',
         render: function() {
-
+            this.c.clearRect(0, 0, this.w, this.h);
+            this.c.beginPath();
+            this.c.moveTo(this.pos.x + 5, this.pos.y);
+            this.c.lineTo(this.pos.x + 10, this.pos.y + 10);
+            this.c.lineTo(this.pos.x, this.pos.y + 10);
+            this.c.lineTo(this.pos.x + 5, this.pos.y);
+            this.c.lineWidth = 1;
+            this.c.strokeStyle = 'red';
+            this.c.stroke();
         },
         effect: function() {}
     },
@@ -196,12 +204,15 @@ Enemy.prototype = {
 
     render: function() {
         var d = this._getDistance();
-        this.dir = {
-            x: (app.player.pos.x - this.pos.x)/d,
-            y: (app.player.pos.y - this.pos.y)/d
-        };
-        this.pos.x = this.pos.x + this.dir.x || 0,
-        this.pos.y = this.pos.y + this.dir.y || 0
+        // move only if we're close enough\
+        if (d < 500) {
+            this.dir = {
+                x: (app.player.pos.x - this.pos.x)/d,
+                y: (app.player.pos.y - this.pos.y)/d
+            };
+            this.pos.x = this.pos.x + this.dir.x || 0;
+            this.pos.y = this.pos.y + this.dir.y || 0;
+        }
         GLITCHES[this.type].render.bind(this).call();
         if (d < 20) {
             this.explode();
