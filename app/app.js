@@ -549,7 +549,8 @@ App.prototype = {
 
     updateMaze: function() {
         if (!this.mouse) return;
-        if ((app.player._getDistance() < 150) &&
+        if (app.player._getDistance() > 200) return;
+        if ((app.player._getDistance() < 100) &&
             ((this.mouse.x > (this.container.width - 100))
             ||(this.mouse.y > (this.container.height - 100))
             ||(this.mouse.x > 0 && this.mouse.x < 100)
@@ -561,8 +562,13 @@ App.prototype = {
             // move all canvases
             var top = parseInt(app.canvases[0].style.top.replace('px', '')) || 0;
             var left = parseInt(app.canvases[0].style.left.replace('px', '')) || 0;
-            top = top - (y*10);
-            left = left - (x*10);
+            //top = top - (y * 5);
+            //left = left - (x * 5);
+            if (Math.abs(x) > Math.abs(y)) {
+                left = left + (x < 0 ? 50: -50)
+            } else {
+                top = top + (y < 0 ? 30 : -30)
+            }
             if (top > 0) {
                 top = 0;
             } else if (top < -2000) {
